@@ -21,7 +21,14 @@ struct ContentView: View {
                 )
             }
             NavigationStack {
-                ContentUnavailableView("가족", systemImage: "person.2.fill")
+                FamilyView(
+                    members: MoilWatchSampleData.members,
+                    availability: [
+                        AvailabilitySlot(id: "1", timeRange: "12:30–13:30", summary: "4명 모두", indicatorColor: MoilWatchSampleData.members[2].color),
+                        AvailabilitySlot(id: "2", timeRange: "17:00–18:00", summary: "3명 가능", indicatorColor: MoilWatchSampleData.members[1].color),
+                        AvailabilitySlot(id: "3", timeRange: "20:30 이후", summary: "4명 모두", indicatorColor: MoilWatchSampleData.members[3].color),
+                    ]
+                )
             }
             NavigationStack {
                 ContentUnavailableView("월간", systemImage: "calendar")
