@@ -31,10 +31,34 @@ struct ContentView: View {
                 )
             }
             NavigationStack {
-                ContentUnavailableView("월간", systemImage: "calendar")
+                MonthlyView(
+                    monthTitle: "7월",
+                    yearTitle: "2026",
+                    weekdaySymbols: ["일", "월", "화", "수", "목", "금", "토"],
+                    weeks: monthWeeks,
+                    legend: Array(MoilWatchSampleData.members.prefix(3))
+                )
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+    }
+
+    /// 서버 연동 전까지 화면을 채우는 7월 달력 표본 데이터입니다.
+    private var monthWeeks: [[MonthDay]] {
+        func day(_ value: Int, today: Bool = false, color: Color? = nil) -> MonthDay {
+            MonthDay(id: value, day: value, isToday: today, eventColor: color)
+        }
+        func blank(_ id: Int) -> MonthDay {
+            MonthDay(id: id, day: nil, isToday: false, eventColor: nil)
+        }
+        let members = MoilWatchSampleData.members
+        return [
+            [day(1), day(2), day(3), day(4), day(5, color: members[2].color), day(6), day(7)],
+            [day(8), day(9), day(10), day(11), day(12), day(13), day(14)],
+            [day(15), day(16, color: members[1].color), day(17), day(18), day(19), day(20), day(21)],
+            [day(22, today: true, color: members[0].color), day(23), day(24), day(25), day(26), day(27), day(28, color: members[3].color)],
+            [day(29), day(30), day(31), blank(-1), blank(-2), blank(-3), blank(-4)],
+        ]
     }
 }
 
