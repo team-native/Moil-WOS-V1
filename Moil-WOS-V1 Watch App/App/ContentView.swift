@@ -7,6 +7,7 @@ struct ContentView: View {
         ScheduleItem(id: "2", time: "18:30", title: "나 팀 회의", owner: MoilWatchSampleData.members[2]),
         ScheduleItem(id: "3", time: "20:00", title: "저녁 약속", owner: MoilWatchSampleData.members[0]),
     ]
+    @State private var selectedItem: ScheduleItem?
 
     var body: some View {
         TabView {
@@ -15,10 +16,11 @@ struct ContentView: View {
                     groupName: "우리 가족",
                     dateTitle: "7월 22일",
                     items: items,
-                    onSelect: { _ in
-                        // TODO: 일정 상세 화면 연결 (다음 이슈에서 진행)
-                    }
+                    onSelect: { selectedItem = $0 }
                 )
+                .navigationDestination(item: $selectedItem) { item in
+                    ScheduleDetailView(event: eventDetail(for: item))
+                }
             }
             NavigationStack {
                 FamilyView(
@@ -59,6 +61,20 @@ struct ContentView: View {
             [day(22, today: true, color: members[0].color), day(23), day(24), day(25), day(26), day(27), day(28, color: members[3].color)],
             [day(29), day(30), day(31), blank(-1), blank(-2), blank(-3), blank(-4)],
         ]
+    }
+
+    /// 서버 연동 전까지, 탭한 일정을 상세 화면용 표본 데이터로 채웁니다.
+    private func eventDetail(for item: ScheduleItem) -> EventDetail {
+        EventDetail(
+            id: item.id,
+            owner: item.owner,
+            title: item.title,
+            dateLabel: "7월 22일 · 수요일",
+            timeLocationLabel: "\(item.time) · 우리집",
+            attendeeCountLabel: "가족 4명",
+            attendees: Array(MoilWatchSampleData.members.prefix(3)),
+            attendingSummary: "3명 참석"
+        )
     }
 }
 
